@@ -97,7 +97,7 @@ export const getMovie = (args) => {
   ).then((response) => {
     if (!response.ok) {
       return response.json().then((error) => {
-        throw new Error(error.status_message || "Something went wrong");
+        throw new Error(error.status_message || "Something has went wrong");
       });
     }
     return response.json();
