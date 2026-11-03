@@ -90,3 +90,18 @@ export const getMovie = (args) => {
       throw error
    });
   };
+
+  const tmdbGet = (path, params = "") => {
+  return fetch(
+    `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US${params}`
+  ).then((response) => {
+    if (!response.ok) {
+      return response.json().then((error) => {
+        throw new Error(error.status_message || "Something went wrong");
+      });
+    }
+    return response.json();
+  });
+};
+
+export const getPopularActors = () => tmdbGet("person/popular", "&page=1");
