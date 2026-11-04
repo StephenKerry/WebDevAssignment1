@@ -5,8 +5,11 @@ import CardMedia from "@mui/material/CardMedia";
 import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router";
+import WorkIcon from "@mui/icons-material/Work";
+import StarRateIcon from "@mui/icons-material/StarRate";
+import Grid from "@mui/material/Grid";
 import img from "../../images/film-poster-placeholder.png";
+import { Link } from "react-router";
 
 export default function ActorCard({ actor }) {
   return (
@@ -14,7 +17,7 @@ export default function ActorCard({ actor }) {
       <CardHeader
         title={
           <Typography variant="h5" component="p">
-            {actor.name}
+            {actor.name}{" "}
           </Typography>
         }
       />
@@ -27,12 +30,20 @@ export default function ActorCard({ actor }) {
         }
       />
       <CardContent>
-        <Typography variant="h6" component="p">
-          {actor.known_for_department}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Popularity: {actor.popularity}
-        </Typography>
+        <Grid container>
+          <Grid size={{ xs: 6 }}>
+            <Typography variant="h6" component="p">
+              <WorkIcon fontSize="small" />
+              {"  "} {actor.known_for_department}
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+            <Typography variant="h6" component="p">
+              <StarRateIcon fontSize="small" />
+              {"  "} {Number(actor.popularity).toFixed(1)}{" "}
+            </Typography>
+          </Grid>
+        </Grid>
       </CardContent>
       <CardActions disableSpacing>
         <Link to={`/actors/${actor.id}`}>
