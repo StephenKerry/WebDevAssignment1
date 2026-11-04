@@ -14,8 +14,8 @@ const ActorsPage = () => {
         
         const formattedActors = json.results.map((actor) => ({
           ...actor,
-          title: actor.name, // Map 'name' to 'title' for the search/filter component
-          poster_path: actor.profile_path, // Map 'profile_path' to 'poster_path'
+          title: actor.name, 
+          poster_path: actor.profile_path, 
         }));
         setActors(formattedActors);
       });

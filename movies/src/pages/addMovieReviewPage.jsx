@@ -1,38 +1,50 @@
-import PageTemplate from "../components/templateMoviePage";
-import ReviewForm from "../components/reviewForm";
-import { useLocation, Navigate } from "react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getMovie } from "../api/tmdb-api";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Header from "../components/headerMovieList";
+import ActorCard from "../components/actorCard";
 import Spinner from "../components/spinner";
+import { getPopularActors } from "../api/tmdb-api";
 
-const WriteReviewPage = () => {
-  const location = useLocation();
-  // Use optional chaining so it doesn't crash if location.state is null
-  const movieId = location.state?.movieId;
+const ActorsPage = () => {
+  const [nameFilter, setNameFilter] = useState("");
 
-  // If someone visits the URL directly without a movieId, redirect them home
-  if (!movieId) {
-    return <Navigate to="/" />;
-  }
-
-  const { data: movie, error, isLoading, isError } = useQuery({
-    queryKey: ['movie', { id: movieId }],
-    queryFn: getMovie,
+  const { data, error, isPending, isError } = useQuery({
+    queryKey: ["popularActors"],
+    queryFn: getPopularActors,
   });
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  if (isPending) return <Spinner />;
+  if (isError) return <h1>{error.message}</h1>;
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
+  const displayedActors = data.results.filter((a) =>
+    a.name.toLowerCase().includes(nameFilter.toLowerCase())
+  );
 
   return (
-    <PageTemplate movie={movie}>
-      <ReviewForm movie={movie} />
-    </PageTemplate>
+    <Grid container>
+      <Grid size={12}>
+        <Header title="Popular Actors" />
+      </Grid>
+      <Grid size={12} sx={{ padding: "20px" }}>
+        <TextField
+          label="Search actors by name"
+          variant="outlined"
+          fullWidth
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+        />
+      </Grid>
+      <Grid container sx={{ padding: "20px" }} spacing={2}>
+        {displayedActors.map((actor) => (
+          <Grid key={actor.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
+            <ActorCard actor={actor} />
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
   );
 };
 
-export default WriteReviewPage;
+export default ActorsPage;
