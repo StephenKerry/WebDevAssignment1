@@ -33,7 +33,7 @@ const ActorDetails = ({ actor }) => {
     return <h1>{error.message}</h1>;
   }
 
-  // Most popular films first, capped so the page isn't huge
+  
   const movies = [...data.cast]
     .sort((a, b) => b.popularity - a.popularity)
     .slice(0, 12);

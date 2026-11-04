@@ -120,3 +120,8 @@ export const getActorMovieCredits = ({ queryKey }) => {
   const [, { id }] = queryKey;
   return tmdbGet(`person/${id}/movie_credits`);
 };
+
+export const getMovieCredits = ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  return tmdbGet(`movie/${id}/credits`);
+};

@@ -9,6 +9,10 @@ import StarRate from "@mui/icons-material/StarRate";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import Fab from "@mui/material/Fab";
 import Typography from "@mui/material/Typography";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router";
+import Avatar from "@mui/material/Avatar";
+import { getMovieCredits } from "../../api/tmdb-api";
 
 const root = {
   display: "flex",
@@ -23,6 +27,11 @@ const chip = { margin: 0.5 };
 
 const MovieDetails = ({ movie }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const { data: credits, isPending: creditsPending, isError: creditsError } = useQuery({
+  queryKey: ["movieCredits", { id: movie.id }],
+  queryFn: getMovieCredits,
+});
 
   return (
     <>
@@ -64,6 +73,37 @@ const MovieDetails = ({ movie }) => {
         <Chip icon={<StarRate />} label={`${movie.vote_average} (${movie.vote_count})`} />
         <Chip label={`Released: ${movie.release_date}`} />
       </Paper>
+
+<Typography variant="h5" component="h3" sx={{ marginTop: 2 }}>
+  Cast
+</Typography>
+
+<Paper component="ul" sx={{ ...root }}>
+  {creditsPending && <li>Loading cast...</li>}
+  {creditsError && <li>Could not load cast.</li>}
+  {credits &&
+    credits.cast.slice(0, 12).map((person) => (
+      <li key={person.id}>
+        <Chip
+          component={Link}
+          to={`/actors/${person.id}`}
+          clickable
+          avatar={
+            <Avatar
+              alt={person.name}
+              src={
+                person.profile_path
+                  ? `https://image.tmdb.org/t/p/w200/${person.profile_path}`
+                  : undefined
+              }
+            />
+          }
+          label={`${person.name} as ${person.character || "Unknown"}`}
+          sx={{ ...chip }}
+        />
+      </li>
+    ))}
+</Paper>
 
       <Fab
         color="secondary"
