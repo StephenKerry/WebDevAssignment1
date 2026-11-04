@@ -105,3 +105,18 @@ export const getMovie = (args) => {
 };
 
 export const getPopularActors = () => tmdbGet("person/popular", "&page=1");
+
+export const getActorImages = ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  return tmdbGet(`person/${id}/images`);
+};
+
+export const getActor = ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  return tmdbGet(`person/${id}`);
+};
+
+export const getActorMovieCredits = ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  return tmdbGet(`person/${id}/movie_credits`);
+};
