@@ -13,7 +13,14 @@ import { Link } from "react-router";
 
 export default function ActorCard({ actor }) {
   return (
-    <Card>
+    <Card
+      sx={{
+        transition: "transform 0.2s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
+      }}
+    >
       <CardHeader
         title={
           <Typography variant="h5" component="p">
