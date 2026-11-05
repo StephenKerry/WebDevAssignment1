@@ -121,7 +121,12 @@ export const getActorMovieCredits = ({ queryKey }) => {
   return tmdbGet(`person/${id}/movie_credits`);
 };
 
-export const getMovieCredits = ({ queryKey }) => {
+export const getTopRated = ({ queryKey }) => {
   const [, { id }] = queryKey;
-  return tmdbGet(`movie/${id}/credits`);
+  return tmdbGet(`movie/${id}/top_rated`);
+};
+
+export const getTrendingMovies = ({ queryKey }) => {
+  const [, { timeWindow }] = queryKey;
+  return tmdbGet(`trending/movie/${timeWindow}`, "&page=1");
 };
