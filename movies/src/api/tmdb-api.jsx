@@ -130,3 +130,8 @@ export const getTrendingMovies = ({ queryKey }) => {
   const [, { timeWindow }] = queryKey;
   return tmdbGet(`trending/movie/${timeWindow}`, "&page=1");
 };
+
+export const getMovieCredits = ({ queryKey }) => {
+  const [, { id }] = queryKey;
+  return tmdbGet(`movie/${id}/credits`);
+};
