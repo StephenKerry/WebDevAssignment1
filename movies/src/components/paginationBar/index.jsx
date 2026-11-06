@@ -5,7 +5,7 @@ const PaginationBar = ({ page, totalPages, onChange }) => {
   return (
     <Box sx={{ display: "flex", justifyContent: "center", padding: "20px" }}>
       <Pagination
-        // TMDB only serves the first 500 pages
+        
         count={Math.min(totalPages || 1, 500)}
         page={page}
         onChange={(event, value) => {
