@@ -16,6 +16,7 @@ import ActorDetailsPage from "./pages/actorDetailsPage";
 import TrendingMoviesPage from "./pages/trendingMoviesPage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import LanguageMoviesPage from "./pages/languageMoviesPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,7 @@ const App = () => {
               <Route path="/reviews/form" element={<AddMovieReviewPage />} />
               <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
               <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+              <Route path="/movies/languages" element={<LanguageMoviesPage />} />
               <Route path="/movies/trending" element={<TrendingMoviesPage />} />
               <Route path="/actors" element={<ActorsPage />} />
               <Route path="/actors/:id" element={<ActorDetailsPage />} />

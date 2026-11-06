@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { getTrendingMovies } from "../api/tmdb-api";
 import PageTemplate from "../components/templateMovieListPage";
-import { useQuery } from "@tanstack/react-query";
+import PaginationBar from "../components/paginationBar";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import Spinner from "../components/spinner";
 import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -10,16 +11,19 @@ import Box from "@mui/material/Box";
 
 const TrendingMoviesPage = () => {
   const [timeWindow, setTimeWindow] = useState("day");
+  const [page, setPage] = useState(1);
 
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["trending", { timeWindow }],
+    queryKey: ["trending", { timeWindow, page }],
     queryFn: getTrendingMovies,
+    placeholderData: keepPreviousData,
   });
 
   const handleChange = (event, newWindow) => {
     // newWindow is null if the user clicks the already-selected button
     if (newWindow !== null) {
       setTimeWindow(newWindow);
+      setPage(1);
     }
   };
 
@@ -40,6 +44,7 @@ const TrendingMoviesPage = () => {
           exclusive
           onChange={handleChange}
           aria-label="trending time window"
+          sx={{ backgroundColor: "white" }}
         >
           <ToggleButton value="day">Today</ToggleButton>
           <ToggleButton value="week">This Week</ToggleButton>
@@ -50,6 +55,12 @@ const TrendingMoviesPage = () => {
         title={timeWindow === "day" ? "Trending Today" : "Trending This Week"}
         movies={data.results}
         action={(movie) => <AddToFavoritesIcon movie={movie} />}
+      />
+
+      <PaginationBar
+        page={page}
+        totalPages={data.total_pages}
+        onChange={setPage}
       />
     </>
   );

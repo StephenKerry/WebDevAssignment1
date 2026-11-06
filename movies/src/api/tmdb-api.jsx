@@ -91,7 +91,7 @@ export const getMovie = (args) => {
    });
   };
 
-  const tmdbGet = (path, params = "") => {
+const tmdbGet = (path, params = "") => {
   return fetch(
     `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US${params}`
   ).then((response) => {
@@ -104,7 +104,10 @@ export const getMovie = (args) => {
   });
 };
 
-export const getPopularActors = () => tmdbGet("person/popular", "&page=1");
+export const getPopularActors = ({ queryKey }) => {
+  const [, { page }] = queryKey;
+  return tmdbGet("person/popular", `&page=${page}`);
+};
 
 export const getActorImages = ({ queryKey }) => {
   const [, { id }] = queryKey;
@@ -121,17 +124,37 @@ export const getActorMovieCredits = ({ queryKey }) => {
   return tmdbGet(`person/${id}/movie_credits`);
 };
 
-export const getTopRated = ({ queryKey }) => {
-  const [, { id }] = queryKey;
-  return tmdbGet(`movie/${id}/top_rated`);
-};
+export const getTopRated = () => tmdbGet("movie/top_rated", "&page=1");
 
 export const getTrendingMovies = ({ queryKey }) => {
-  const [, { timeWindow }] = queryKey;
-  return tmdbGet(`trending/movie/${timeWindow}`, "&page=1");
+  const [, { timeWindow, page }] = queryKey;
+  return tmdbGet(`trending/movie/${timeWindow}`, `&page=${page}`);
 };
 
 export const getMovieCredits = ({ queryKey }) => {
   const [, { id }] = queryKey;
   return tmdbGet(`movie/${id}/credits`);
+};
+
+export const getLanguages = () => tmdbGet("configuration/languages");
+
+export const getMoviesByLanguage = ({ queryKey }) => {
+  const [, { languageCode, page }] = queryKey;
+  return tmdbGet(
+    "discover/movie",
+    `&with_original_language=${languageCode}&sort_by=popularity.desc&page=${page}`
+  );
+};
+
+export const getUpcoming = ({ queryKey }) => {
+  const [, { page }] = queryKey;
+  return tmdbGet("movie/upcoming", `&page=${page}`);
+};
+
+export const getDiscoverMovies = ({ queryKey }) => {
+  const [, { page }] = queryKey;
+  return tmdbGet(
+    "discover/movie",
+    `&include_adult=false&include_video=false&sort_by=popularity.desc&page=${page}`
+  );
 };

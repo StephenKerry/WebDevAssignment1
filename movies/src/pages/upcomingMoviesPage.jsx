@@ -1,26 +1,41 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import PageTemplate from "../components/templateMovieListPage";
-import AddToPlaylistIcon from "../components/cardIcons/addToPlaylist"; 
+import AddToPlaylistIcon from "../components/cardIcons/addToPlaylist";
+import PaginationBar from "../components/paginationBar";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import Spinner from "../components/spinner";
+import { getUpcoming } from "../api/tmdb-api";
 
 const UpcomingMoviesPage = () => {
-  const [movies, setMovies] = useState([]);
+  const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/upcoming?api_key=${"e3d9284a561b7f945705a307f184e541"}&language=en-US&page=1`
-    )
-      .then((res) => res.json())
-      .then((json) => setMovies(json.results));
-  }, []);
+  const { data, error, isPending, isError } = useQuery({
+    queryKey: ["upcoming", { page }],
+    queryFn: getUpcoming,
+    placeholderData: keepPreviousData,
+  });
+
+  if (isPending) {
+    return <Spinner />;
+  }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
 
   return (
-    <PageTemplate
-      title="Upcoming Movies"
-      movies={movies}
-      action={(movie) => {
-        return <AddToPlaylistIcon movie={movie} />;
-      }}
-    />
+    <>
+      <PageTemplate
+        title="Upcoming Movies"
+        movies={data.results}
+        action={(movie) => <AddToPlaylistIcon movie={movie} />}
+      />
+      <PaginationBar
+        page={page}
+        totalPages={data.total_pages}
+        onChange={setPage}
+      />
+    </>
   );
 };
 
