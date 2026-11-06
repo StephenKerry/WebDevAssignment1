@@ -32,7 +32,7 @@ const LanguageMoviesPage = () => {
     return <h1>{languagesQuery.error.message}</h1>;
   }
 
-  // Tidy the list: drop the "No Language" entry and sort A to Z
+  
   const languages = languagesQuery.data
     .filter((l) => l.english_name && l.english_name !== "No Language")
     .sort((a, b) => a.english_name.localeCompare(b.english_name));

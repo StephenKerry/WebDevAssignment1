@@ -20,7 +20,7 @@ const TrendingMoviesPage = () => {
   });
 
   const handleChange = (event, newWindow) => {
-    // newWindow is null if the user clicks the already-selected button
+    
     if (newWindow !== null) {
       setTimeWindow(newWindow);
       setPage(1);
